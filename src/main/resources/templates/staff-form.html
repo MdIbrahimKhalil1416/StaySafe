@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${formTitle}">Staff Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container narrow">
+    <h1 class="page-title" th:text="${formTitle}">Add Staff</h1>
+
+    <form th:action="${formAction}" th:object="${staff}" method="post" class="task-form-card">
+        <label>Name</label>
+        <input type="text" th:field="*{name}" placeholder="e.g. Karim Ahmed" required>
+        <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
+        <label>Role</label>
+        <select th:field="*{role}">
+            <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+        </select>
+
+        <div class="form-row">
+            <div>
+                <label>Phone</label>
+                <input type="text" th:field="*{phone}" placeholder="e.g. 01712345678">
+            </div>
+            <div>
+                <label>Email</label>
+                <input type="email" th:field="*{email}" placeholder="e.g. karim@hotel.com">
+            </div>
+        </div>
+
+        <label>Joining Date</label>
+        <input type="date" th:field="*{joiningDate}">
+
+        <div class="form-actions">
+            <a href="/staff" class="btn">Cancel</a>
+            <button type="submit" class="btn btn-accent">Save Staff</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

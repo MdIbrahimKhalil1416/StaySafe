@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>StayEase - Bookings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <div class="page-header">
+        <h1 class="page-title">Bookings</h1>
+        <a href="/bookings/new" class="btn btn-accent">+ New Booking</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(bookings)}" class="empty-state">
+        <p>No bookings yet.</p>
+    </div>
+
+    <table class="data-table" th:unless="${#lists.isEmpty(bookings)}">
+        <thead>
+            <tr>
+                <th>Guest</th><th>Phone</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Status</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="b : ${bookings}">
+                <td th:text="${b.guestName}">Guest</td>
+                <td th:text="${b.guestPhone}">01xxxxxxxxx</td>
+                <td th:text="${b.roomNumber}">101</td>
+                <td th:text="${b.checkInDate}">2026-01-01</td>
+                <td th:text="${b.checkOutDate}">2026-01-03</td>
+                <td>
+                    <span class="badge" th:classappend="${'badge-booking-' + #strings.toLowerCase(b.status)}"
+                          th:text="${b.status.label}">Booked</span>
+                </td>
+                <td class="table-actions">
+                    <form th:if="${b.status.name() == 'BOOKED'}" th:action="@{/bookings/{id}/checkout(id=${b.id})}" method="post">
+                        <button type="submit" class="btn btn-sm">Check out</button>
+                    </form>
+                    <form th:if="${b.status.name() == 'BOOKED'}" th:action="@{/bookings/{id}/cancel(id=${b.id})}" method="post"
+                          onsubmit="return confirm('Cancel this booking?');">
+                        <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

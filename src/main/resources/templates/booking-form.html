@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Booking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container narrow">
+    <h1 class="page-title">New Booking</h1>
+
+    <p class="field-error" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+    <form th:if="${#lists.isEmpty(availableRooms)}" class="task-form-card">
+        <p>No rooms are currently available. Free up a room or add a new one first.</p>
+        <a href="/rooms" class="btn btn-accent">Go to Rooms</a>
+    </form>
+
+    <form th:unless="${#lists.isEmpty(availableRooms)}" th:action="@{/bookings}" th:object="${booking}" method="post" class="task-form-card">
+        <label>Guest Name</label>
+        <input type="text" th:field="*{guestName}" placeholder="e.g. Rahim Uddin" required>
+        <p class="field-error" th:if="${#fields.hasErrors('guestName')}" th:errors="*{guestName}"></p>
+
+        <label>Phone</label>
+        <input type="text" th:field="*{guestPhone}" placeholder="e.g. 01712345678">
+
+        <label>Room</label>
+        <select th:field="*{roomId}">
+            <option th:each="r : ${availableRooms}" th:value="${r.id}"
+                    th:text="${'Room ' + r.roomNumber + ' (' + r.type + ', ৳' + r.pricePerNight + '/night)'}"></option>
+        </select>
+
+        <div class="form-row">
+            <div>
+                <label>Check-in</label>
+                <input type="date" th:field="*{checkInDate}">
+            </div>
+            <div>
+                <label>Check-out</label>
+                <input type="date" th:field="*{checkOutDate}">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="/bookings" class="btn">Cancel</a>
+            <button type="submit" class="btn btn-accent">Confirm Booking</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

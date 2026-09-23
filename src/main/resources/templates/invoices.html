@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>StayEase - Invoices</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <h1 class="page-title">Invoices</h1>
+
+    <div th:if="${#lists.isEmpty(invoices)}" class="empty-state">
+        <p>No invoices yet - they're generated automatically when a booking is checked out.</p>
+    </div>
+
+    <table class="data-table" th:unless="${#lists.isEmpty(invoices)}">
+        <thead>
+            <tr><th>Guest</th><th>Room</th><th>Nights</th><th>Total (৳)</th><th>Generated</th><th>Status</th><th></th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="inv : ${invoices}">
+                <td th:text="${inv.guestName}">Guest</td>
+                <td th:text="${inv.roomNumber}">101</td>
+                <td th:text="${inv.nights}">2</td>
+                <td th:text="${inv.totalAmount}">5000</td>
+                <td th:text="${inv.generatedAt}">2026-01-05</td>
+                <td>
+                    <span class="badge" th:classappend="${inv.paid ? 'badge-booking-checked_out' : 'badge-maintenance'}"
+                          th:text="${inv.paid ? 'Paid' : 'Unpaid'}">Unpaid</span>
+                </td>
+                <td>
+                    <form th:if="${!inv.paid}" th:action="@{/invoices/{id}/pay(id=${inv.id})}" method="post">
+                        <button type="submit" class="btn btn-sm btn-accent">Mark Paid</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

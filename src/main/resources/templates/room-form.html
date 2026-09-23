@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${formTitle}">Room Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container narrow">
+    <h1 class="page-title" th:text="${formTitle}">Add Room</h1>
+
+    <form th:action="${formAction}" th:object="${room}" method="post" class="task-form-card">
+        <label>Room Number</label>
+        <input type="text" th:field="*{roomNumber}" placeholder="e.g. 101" required>
+        <p class="field-error" th:if="${#fields.hasErrors('roomNumber')}" th:errors="*{roomNumber}"></p>
+
+        <div class="form-row">
+            <div>
+                <label>Type</label>
+                <select th:field="*{type}">
+                    <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+                </select>
+            </div>
+            <div>
+                <label>Status</label>
+                <select th:field="*{status}">
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.label}"></option>
+                </select>
+            </div>
+        </div>
+
+        <label>Price per night (৳)</label>
+        <input type="number" step="0.01" th:field="*{pricePerNight}" placeholder="e.g. 2500">
+        <p class="field-error" th:if="${#fields.hasErrors('pricePerNight')}" th:errors="*{pricePerNight}"></p>
+
+        <label>Description</label>
+        <textarea th:field="*{description}" rows="3" placeholder="e.g. Sea-facing, king bed"></textarea>
+
+        <div class="form-actions">
+            <a href="/rooms" class="btn">Cancel</a>
+            <button type="submit" class="btn btn-accent">Save Room</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

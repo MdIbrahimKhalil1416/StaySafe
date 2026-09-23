@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>StayEase - Staff</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <div class="page-header">
+        <h1 class="page-title">Staff</h1>
+        <a href="/staff/new" class="btn btn-accent">+ Add Staff</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(staffList)}" class="empty-state">
+        <p>No staff added yet.</p>
+    </div>
+
+    <table class="data-table" th:unless="${#lists.isEmpty(staffList)}">
+        <thead>
+            <tr><th>Name</th><th>Role</th><th>Phone</th><th>Email</th><th>Joined</th><th></th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="s : ${staffList}">
+                <td th:text="${s.name}">Name</td>
+                <td><span class="badge badge-staff-role" th:text="${s.role}">ROLE</span></td>
+                <td th:text="${s.phone}">Phone</td>
+                <td th:text="${s.email}">Email</td>
+                <td th:text="${s.joiningDate}">2026-01-01</td>
+                <td class="table-actions">
+                    <a th:href="@{/staff/{id}/edit(id=${s.id})}" class="btn btn-sm">Edit</a>
+                    <form th:action="@{/staff/{id}/delete(id=${s.id})}" method="post" onsubmit="return confirm('Remove this staff member?');">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

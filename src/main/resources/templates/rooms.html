@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>StayEase - Rooms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <div class="page-header">
+        <h1 class="page-title">Rooms</h1>
+        <a href="/rooms/new" class="btn btn-accent">+ Add Room</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(rooms)}" class="empty-state">
+        <p>No rooms yet. Add your first one!</p>
+    </div>
+
+    <div class="task-grid" th:unless="${#lists.isEmpty(rooms)}">
+        <div class="task-card" th:each="room : ${rooms}"
+             th:classappend="${'room-' + #strings.toLowerCase(room.status)}">
+            <div class="task-card-top">
+                <span class="badge" th:classappend="${'badge-' + #strings.toLowerCase(room.status)}"
+                      th:text="${room.status.label}">Status</span>
+                <span class="priority-tag" th:text="${room.type}">SINGLE</span>
+            </div>
+            <h3 th:text="'Room ' + ${room.roomNumber}">Room 101</h3>
+            <p class="task-desc" th:text="${room.description}">Description</p>
+            <p class="task-due">৳<span th:text="${room.pricePerNight}">1000</span> / night</p>
+            <div class="task-actions">
+                <a th:href="@{/rooms/{id}/edit(id=${room.id})}" class="btn btn-sm">Edit</a>
+                <form th:action="@{/rooms/{id}/delete(id=${room.id})}" method="post" onsubmit="return confirm('Delete this room?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

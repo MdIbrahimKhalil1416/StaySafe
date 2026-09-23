@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>StayEase - Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <h1 class="page-title">Dashboard</h1>
+
+    <section class="stats">
+        <div class="stat-card stat-available">
+            <span class="stat-number" th:text="${roomCounts.get(T(com.example.stayease.model.RoomStatus).AVAILABLE)}">0</span>
+            <span class="stat-label">Available Rooms</span>
+        </div>
+        <div class="stat-card stat-occupied">
+            <span class="stat-number" th:text="${roomCounts.get(T(com.example.stayease.model.RoomStatus).OCCUPIED)}">0</span>
+            <span class="stat-label">Occupied Rooms</span>
+        </div>
+        <div class="stat-card stat-maintenance">
+            <span class="stat-number" th:text="${roomCounts.get(T(com.example.stayease.model.RoomStatus).MAINTENANCE)}">0</span>
+            <span class="stat-label">Under Maintenance</span>
+        </div>
+    </section>
+
+    <div class="quick-links">
+        <a href="/rooms" class="quick-card">Manage Rooms &rarr;</a>
+        <a href="/bookings" class="quick-card">Manage Bookings &rarr;</a>
+    </div>
+
+    <h2 class="section-title">Active Bookings</h2>
+    <div th:if="${#lists.isEmpty(activeBookings)}" class="empty-state">
+        <p>No active bookings right now.</p>
+    </div>
+    <table class="data-table" th:unless="${#lists.isEmpty(activeBookings)}">
+        <thead>
+            <tr><th>Guest</th><th>Room</th><th>Check-in</th><th>Check-out</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="b : ${activeBookings}">
+                <td th:text="${b.guestName}">Guest</td>
+                <td th:text="${b.roomNumber}">101</td>
+                <td th:text="${b.checkInDate}">2026-01-01</td>
+                <td th:text="${b.checkOutDate}">2026-01-03</td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
